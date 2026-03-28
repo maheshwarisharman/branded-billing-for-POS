@@ -1,0 +1,37 @@
+{
+  "name": "billdrop-agent",
+  "version": "1.0.0",
+  "description": "BillDrop Agent — silent POS print-job interceptor daemon",
+  "main": "dist/main.js",
+  "scripts": {
+    "postinstall": "electron-rebuild -f -w better-sqlite3",
+    "dev": "tsc --noEmit && electron .",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "electron .",
+    "dist": "tsc && electron-builder",
+    "dist:win": "tsc && electron-builder --win",
+    "dist:mac": "tsc && electron-builder --mac"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "chokidar": "^3.6.0",
+    "electron-store": "^8.2.0",
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.7.0",
+    "pdf-parse": "^1.1.1",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
+    "@types/better-sqlite3": "^7.6.8",
+    "@types/form-data": "^2.2.1",
+    "@types/node": "^20.19.37",
+    "@types/node-fetch": "^2.6.11",
+    "@types/pdf-parse": "^1.1.4",
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.0",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BillDrop Agent — Settings</title>
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #1a1a1f;
+      --border: #2a2a32;
+      --border-focus: #6c63ff;
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888a0;
+      --accent: #6c63ff;
+      --accent-hover: #7c73ff;
+      --success: #22c55e;
+      --error: #ef4444;
+      --radius: 8px;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
+      padding: 28px 32px;
+      font-size: 14px;
+      line-height: 1.5;
+      user-select: none;
+      -webkit-app-region: drag;
+    }
+
+    .no-drag { -webkit-app-region: no-drag; }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    header p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 7px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="url"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-app-region: no-drag;
+    }
+
+    input:focus {
+      border-color: var(--border-focus);
+    }
+
+    input::placeholder {
+      color: #44445a;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      white-space: nowrap;
+      -webkit-app-region: no-drag;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #22222a; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+    }
+    .btn-ghost:hover { color: var(--text-primary); background: var(--surface); }
+
+    .connection-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .connection-status {
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-secondary);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .status-dot.ok { background: var(--success); }
+    .status-dot.err { background: var(--error); }
+
+    .connection-status.ok { color: var(--success); }
+    .connection-status.err { color: var(--error); }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 24px 0;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .save-feedback {
+      font-size: 12px;
+      color: var(--success);
+      align-self: center;
+      margin-right: auto;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-feedback.visible { opacity: 1; }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+    }
+
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,15,17,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div id="loadingOverlay">Loading…</div>
+
+  <header>
+    <div class="logo">📦</div>
+    <div>
+      <h1>BillDrop Agent</h1>
+      <p>POS Bill Interceptor Settings</p>
+    </div>
+  </header>
+
+  <div class="form-group no-drag">
+    <label for="watchFolder">Watch Folder</label>
+    <div class="input-row">
+      <input
+        type="text"
+        id="watchFolder"
+        placeholder="/path/to/pdf/output"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn-secondary" id="browseBtn">Browse…</button>
+    </div>
+    <p class="hint">The folder where your POS system saves PDF bills.</p>
+  </div>
+
+  <div class="form-group no-drag">
+    <label for="backendUrl">Backend API URL</label>
+    <input
+      type="url"
+      id="backendUrl"
+      placeholder="https://api.yourdomain.com/bills/ingest"
+      autocomplete="off"
+      spellcheck="false"
+    />
+
+    <div class="connection-row">
+      <button class="btn-ghost" id="testConnectionBtn">Test Connection</button>
+      <span class="connection-status" id="connectionStatus" aria-live="polite">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Not tested</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group no-drag">
+    <label for="merchantKey">Merchant API Key</label>
+    <div class="input-row">
+      <input
+        type="password"
+        id="merchantKey"
+        placeholder="••••••••••••••••"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn-ghost" id="toggleKeyBtn" title="Show/hide key">👁</button>
+    </div>
+    <p class="hint">Your unique merchant key from the BillDrop dashboard.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="actions no-drag">
+    <span class="save-feedback" id="saveFeedback">✓ Saved</span>
+    <button class="btn-primary" id="saveBtn">Save &amp; Apply</button>
+  </div>
+
+  <script>
+    const api = window.electron;
+
+    const watchFolderInput  = document.getElementById('watchFolder');
+    const backendUrlInput   = document.getElementById('backendUrl');
+    const merchantKeyInput  = document.getElementById('merchantKey');
+    const browseBtn         = document.getElementById('browseBtn');
+    const testConnectionBtn = document.getElementById('testConnectionBtn');
+    const toggleKeyBtn      = document.getElementById('toggleKeyBtn');
+    const saveBtn           = document.getElementById('saveBtn');
+    const saveFeedback      = document.getElementById('saveFeedback');
+    const statusDot         = document.getElementById('statusDot');
+    const statusText        = document.getElementById('statusText');
+    const connectionStatus  = document.getElementById('connectionStatus');
+    const loadingOverlay    = document.getElementById('loadingOverlay');
+
+    // ── Load config on mount ──────────────────────────────────────────────────
+    (async () => {
+      try {
+        const config = await api.getConfig();
+        watchFolderInput.value  = config.watchFolder  || '';
+        backendUrlInput.value   = config.backendUrl   || '';
+        merchantKeyInput.value  = config.merchantKey  || '';
+      } catch (e) {
+        console.error('Failed to load config', e);
+      } finally {
+        loadingOverlay.style.display = 'none';
+      }
+    })();
+
+    // ── Browse folder ─────────────────────────────────────────────────────────
+    browseBtn.addEventListener('click', async () => {
+      const folder = await api.selectFolder();
+      if (folder) {
+        watchFolderInput.value = folder;
+      }
+    });
+
+    // ── Show/hide merchant key ────────────────────────────────────────────────
+    let keyVisible = false;
+    toggleKeyBtn.addEventListener('click', () => {
+      keyVisible = !keyVisible;
+      merchantKeyInput.type = keyVisible ? 'text' : 'password';
+      toggleKeyBtn.textContent = keyVisible ? '🙈' : '👁';
+    });
+
+    // ── Test connection ───────────────────────────────────────────────────────
+    testConnectionBtn.addEventListener('click', async () => {
+      const url = backendUrlInput.value.trim();
+      if (!url) {
+        setStatus('err', 'Enter a backend URL first');
+        return;
+      }
+
+      testConnectionBtn.disabled = true;
+      testConnectionBtn.textContent = 'Testing…';
+      setStatus('', 'Testing…');
+
+      try {
+        const result = await api.testConnection(url);
+        if (result.ok) {
+          setStatus('ok', 'Connected');
+        } else {
+          setStatus('err', result.error || 'Failed');
+        }
+      } catch (e) {
+        setStatus('err', String(e));
+      } finally {
+        testConnectionBtn.disabled = false;
+        testConnectionBtn.textContent = 'Test Connection';
+      }
+    });
+
+    function setStatus(type, message) {
+      statusDot.className  = `status-dot ${type}`;
+      connectionStatus.className = `connection-status ${type}`;
+      statusText.textContent = message;
+    }
+
+    // ── Save config ───────────────────────────────────────────────────────────
+    saveBtn.addEventListener('click', async () => {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+
+      try {
+        await api.saveConfig({
+          watchFolder:  watchFolderInput.value.trim(),
+          backendUrl:   backendUrlInput.value.trim(),
+          merchantKey:  merchantKeyInput.value.trim(),
+        });
+
+        saveFeedback.classList.add('visible');
+        setTimeout(() => saveFeedback.classList.remove('visible'), 2500);
+      } catch (e) {
+        alert('Failed to save settings:\n' + String(e));
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save & Apply';
+      }
+    });
+  </script>
+</body>
+</html>
