@@ -13,6 +13,7 @@ export interface ElectronBridge {
   }) => Promise<void>;
   selectFolder: () => Promise<string | null>;
   testConnection: (url: string) => Promise<{ ok: boolean; error?: string }>;
+  resetConfig: () => Promise<boolean>;
 }
 
 contextBridge.exposeInMainWorld('electron', {
@@ -24,5 +25,7 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.invoke('dialog:selectFolder'),
   testConnection: (...args: unknown[]): Promise<unknown> =>
     ipcRenderer.invoke('connection:test', args[0]),
+  resetConfig: (): Promise<unknown> =>
+    ipcRenderer.invoke('config:reset'),
 });
 

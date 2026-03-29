@@ -4,8 +4,8 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import { logger } from './logger';
 import { initDb, closeDb } from './db';
-import { getConfig, setConfig, isFirstLaunch, markConfigured, AppConfig } from './config';
-import { createTray, setTrayStatus, openSettingsWindow, destroyTray } from './tray';
+import { getConfig, setConfig, isFirstLaunch, markConfigured, clearConfig, AppConfig } from './config';
+import { createTray, setTrayStatus, openSettingsWindow, destroyTray, refreshTrayMenu } from './tray';
 import { startWatcher, stopWatcher } from './watcher';
 
 // ─── Prevent multiple instances ──────────────────────────────────────────────
@@ -104,6 +104,28 @@ ipcMain.handle('config:save', (_event: IpcMainInvokeEvent, updates: Partial<AppC
   } else {
     setTrayStatus('error', 'Watch folder not found — reconfigure in Settings');
   }
+});
+
+// ─── IPC: Reset config ────────────────────────────────────────────────────────
+ipcMain.handle('config:reset', async () => {
+  const { response } = await dialog.showMessageBox({
+    type: 'warning',
+    buttons: ['Reset', 'Cancel'],
+    defaultId: 1,
+    cancelId: 1,
+    title: 'Reset Settings',
+    message: 'Clear all saved settings?',
+    detail: 'This will remove your watch folder, API URL, and merchant key from this machine.',
+  });
+
+  if (response === 0) {
+    clearConfig();
+    stopWatcher();
+    setTrayStatus('error', 'Not configured — please set your watch folder');
+    refreshTrayMenu();
+    return true;
+  }
+  return false;
 });
 
 // ─── IPC: Open folder picker dialog ──────────────────────────────────────────

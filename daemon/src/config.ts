@@ -56,3 +56,11 @@ export function isFirstLaunch(): boolean {
 export function markConfigured(): void {
   store.set('isConfigured', true);
 }
+
+export function clearConfig(): void {
+  store.clear();
+}
+
+export function getStorePath(): string {
+  return store.path;
+}

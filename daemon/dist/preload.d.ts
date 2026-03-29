@@ -14,5 +14,6 @@ export interface ElectronBridge {
         ok: boolean;
         error?: string;
     }>;
+    resetConfig: () => Promise<boolean>;
 }
 //# sourceMappingURL=preload.d.ts.map

@@ -7,6 +7,8 @@ exports.getConfig = getConfig;
 exports.setConfig = setConfig;
 exports.isFirstLaunch = isFirstLaunch;
 exports.markConfigured = markConfigured;
+exports.clearConfig = clearConfig;
+exports.getStorePath = getStorePath;
 const electron_store_1 = __importDefault(require("electron-store"));
 const schema = {
     watchFolder: {
@@ -51,5 +53,11 @@ function isFirstLaunch() {
 }
 function markConfigured() {
     store.set('isConfigured', true);
+}
+function clearConfig() {
+    store.clear();
+}
+function getStorePath() {
+    return store.path;
 }
 //# sourceMappingURL=config.js.map

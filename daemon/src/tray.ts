@@ -1,8 +1,7 @@
-import { Tray, Menu, app, shell, BrowserWindow, Notification } from 'electron';
+import { Tray, Menu, app, shell, BrowserWindow, Notification, dialog, nativeImage } from 'electron';
 import path from 'path';
-import { getConfig } from './config';
-import { getLogFilePath } from './logger';
-import { logger } from './logger';
+import { getConfig, clearConfig } from './config';
+import { getLogFilePath, logger } from './logger';
 
 export type TrayState = 'connected' | 'error';
 
@@ -11,14 +10,15 @@ let currentState: TrayState = 'error';
 let statusMessage: string = 'Initializing…';
 let settingsWindow: BrowserWindow | null = null;
 
-function getIconPath(state: TrayState): string {
+function getTrayIcon(state: TrayState): Electron.NativeImage {
   const iconName = state === 'connected' ? 'icon-green.png' : 'icon-red.png';
-  // In development, icons are in ../assets relative to dist/
-  // In production, they're in process.resourcesPath/assets/
-  if (app.isPackaged) {
-    return path.join(process.resourcesPath, 'assets', iconName);
-  }
-  return path.join(__dirname, '..', 'assets', iconName);
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets', iconName)
+    : path.join(__dirname, '..', 'assets', iconName);
+
+  const img = nativeImage.createFromPath(iconPath);
+  // macOS menubar icons must be 16x16 (32x32 for @2x retina)
+  return img.resize({ width: 16, height: 16 });
 }
 
 function buildContextMenu(): Menu {
@@ -48,6 +48,28 @@ function buildContextMenu(): Menu {
     },
     { type: 'separator' },
     {
+      label: 'Reset Settings…',
+      click: async () => {
+        const { response } = await dialog.showMessageBox({
+          type: 'warning',
+          buttons: ['Reset', 'Cancel'],
+          defaultId: 1,
+          cancelId: 1,
+          title: 'Reset Settings',
+          message: 'Clear all saved settings?',
+          detail:
+            'This will remove your watch folder, API URL, and merchant key. The settings window will open so you can reconfigure.',
+        });
+        if (response === 0) {
+          clearConfig();
+          logger.info('Settings reset by user');
+          openSettingsWindow();
+          refreshTrayMenu();
+        }
+      },
+    },
+    { type: 'separator' },
+    {
       label: 'Quit BillDrop Agent',
       click: () => {
         logger.info('User requested quit via tray menu');
@@ -58,7 +80,7 @@ function buildContextMenu(): Menu {
 }
 
 export function createTray(): void {
-  tray = new Tray(getIconPath('error'));
+  tray = new Tray(getTrayIcon('error'));
   tray.setToolTip('BillDrop Agent');
   tray.setContextMenu(buildContextMenu());
 
@@ -76,7 +98,7 @@ export function setTrayStatus(state: TrayState, message: string): void {
   statusMessage = message;
 
   if (tray) {
-    tray.setImage(getIconPath(state));
+    tray.setImage(getTrayIcon(state));
     tray.setToolTip(`BillDrop Agent — ${message}`);
     tray.setContextMenu(buildContextMenu());
   }

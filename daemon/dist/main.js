@@ -93,6 +93,26 @@ electron_1.ipcMain.handle('config:save', (_event, updates) => {
         (0, tray_1.setTrayStatus)('error', 'Watch folder not found — reconfigure in Settings');
     }
 });
+// ─── IPC: Reset config ────────────────────────────────────────────────────────
+electron_1.ipcMain.handle('config:reset', async () => {
+    const { response } = await electron_1.dialog.showMessageBox({
+        type: 'warning',
+        buttons: ['Reset', 'Cancel'],
+        defaultId: 1,
+        cancelId: 1,
+        title: 'Reset Settings',
+        message: 'Clear all saved settings?',
+        detail: 'This will remove your watch folder, API URL, and merchant key from this machine.',
+    });
+    if (response === 0) {
+        (0, config_1.clearConfig)();
+        (0, watcher_1.stopWatcher)();
+        (0, tray_1.setTrayStatus)('error', 'Not configured — please set your watch folder');
+        (0, tray_1.refreshTrayMenu)();
+        return true;
+    }
+    return false;
+});
 // ─── IPC: Open folder picker dialog ──────────────────────────────────────────
 electron_1.ipcMain.handle('dialog:selectFolder', async () => {
     const result = await electron_1.dialog.showOpenDialog({

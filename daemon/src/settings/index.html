@@ -280,6 +280,7 @@
   <div class="divider"></div>
 
   <div class="actions no-drag">
+    <button class="btn-ghost" id="resetBtn" style="margin-right: auto;">Reset Settings</button>
     <span class="save-feedback" id="saveFeedback">✓ Saved</span>
     <button class="btn-primary" id="saveBtn">Save &amp; Apply</button>
   </div>
@@ -294,6 +295,7 @@
     const testConnectionBtn = document.getElementById('testConnectionBtn');
     const toggleKeyBtn      = document.getElementById('toggleKeyBtn');
     const saveBtn           = document.getElementById('saveBtn');
+    const resetBtn          = document.getElementById('resetBtn');
     const saveFeedback      = document.getElementById('saveFeedback');
     const statusDot         = document.getElementById('statusDot');
     const statusText        = document.getElementById('statusText');
@@ -382,6 +384,23 @@
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Save & Apply';
+      }
+    });
+
+    // ── Reset config ──────────────────────────────────────────────────────────
+    resetBtn.addEventListener('click', async () => {
+      resetBtn.disabled = true;
+      resetBtn.textContent = 'Resetting…';
+      try {
+        const wasReset = await api.resetConfig();
+        if (wasReset) {
+          window.location.reload();
+        }
+      } catch (e) {
+        alert('Failed to reset settings:\n' + String(e));
+      } finally {
+        resetBtn.disabled = false;
+        resetBtn.textContent = 'Reset Settings';
       }
     });
   </script>

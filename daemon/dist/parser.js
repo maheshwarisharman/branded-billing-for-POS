@@ -59,9 +59,6 @@ function extractName(text) {
  */
 function extractOrderId(text) {
     const patterns = [
-        /(?:Invoice\s*No\.?\s*[:：]|Invoice\s*#\s*[:：]?)\s*([A-Z0-9\-]+)/i,
-        /(?:Order\s*No\.?\s*[:：]|Order\s*#\s*[:：]?)\s*([A-Z0-9\-]+)/i,
-        /(?:#)\s*([A-Z0-9\-]+)/i,
         /\b(ORD[A-Z0-9\-]+)\b/i,
         /\b(INV[A-Z0-9\-]+)\b/i,
     ];

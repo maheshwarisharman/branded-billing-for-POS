@@ -8,4 +8,6 @@ export declare function getConfig(): AppConfig;
 export declare function setConfig(updates: Partial<AppConfig>): void;
 export declare function isFirstLaunch(): boolean;
 export declare function markConfigured(): void;
+export declare function clearConfig(): void;
+export declare function getStorePath(): string;
 //# sourceMappingURL=config.d.ts.map

@@ -6,5 +6,6 @@ electron_1.contextBridge.exposeInMainWorld('electron', {
     saveConfig: (config) => electron_1.ipcRenderer.invoke('config:save', config),
     selectFolder: () => electron_1.ipcRenderer.invoke('dialog:selectFolder'),
     testConnection: (...args) => electron_1.ipcRenderer.invoke('connection:test', args[0]),
+    resetConfig: () => electron_1.ipcRenderer.invoke('config:reset'),
 });
 //# sourceMappingURL=preload.js.map

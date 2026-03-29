@@ -13,19 +13,18 @@ const electron_1 = require("electron");
 const path_1 = __importDefault(require("path"));
 const config_1 = require("./config");
 const logger_1 = require("./logger");
-const logger_2 = require("./logger");
 let tray = null;
 let currentState = 'error';
 let statusMessage = 'Initializing…';
 let settingsWindow = null;
-function getIconPath(state) {
+function getTrayIcon(state) {
     const iconName = state === 'connected' ? 'icon-green.png' : 'icon-red.png';
-    // In development, icons are in ../assets relative to dist/
-    // In production, they're in process.resourcesPath/assets/
-    if (electron_1.app.isPackaged) {
-        return path_1.default.join(process.resourcesPath, 'assets', iconName);
-    }
-    return path_1.default.join(__dirname, '..', 'assets', iconName);
+    const iconPath = electron_1.app.isPackaged
+        ? path_1.default.join(process.resourcesPath, 'assets', iconName)
+        : path_1.default.join(__dirname, '..', 'assets', iconName);
+    const img = electron_1.nativeImage.createFromPath(iconPath);
+    // macOS menubar icons must be 16x16 (32x32 for @2x retina)
+    return img.resize({ width: 16, height: 16 });
 }
 function buildContextMenu() {
     const config = (0, config_1.getConfig)();
@@ -53,16 +52,37 @@ function buildContextMenu() {
         },
         { type: 'separator' },
         {
+            label: 'Reset Settings…',
+            click: async () => {
+                const { response } = await electron_1.dialog.showMessageBox({
+                    type: 'warning',
+                    buttons: ['Reset', 'Cancel'],
+                    defaultId: 1,
+                    cancelId: 1,
+                    title: 'Reset Settings',
+                    message: 'Clear all saved settings?',
+                    detail: 'This will remove your watch folder, API URL, and merchant key. The settings window will open so you can reconfigure.',
+                });
+                if (response === 0) {
+                    (0, config_1.clearConfig)();
+                    logger_1.logger.info('Settings reset by user');
+                    openSettingsWindow();
+                    refreshTrayMenu();
+                }
+            },
+        },
+        { type: 'separator' },
+        {
             label: 'Quit BillDrop Agent',
             click: () => {
-                logger_2.logger.info('User requested quit via tray menu');
+                logger_1.logger.info('User requested quit via tray menu');
                 electron_1.app.quit();
             },
         },
     ]);
 }
 function createTray() {
-    tray = new electron_1.Tray(getIconPath('error'));
+    tray = new electron_1.Tray(getTrayIcon('error'));
     tray.setToolTip('BillDrop Agent');
     tray.setContextMenu(buildContextMenu());
     // Right-click already shows the context menu.
@@ -70,17 +90,17 @@ function createTray() {
     tray.on('click', () => {
         tray?.popUpContextMenu();
     });
-    logger_2.logger.info('Tray created');
+    logger_1.logger.info('Tray created');
 }
 function setTrayStatus(state, message) {
     currentState = state;
     statusMessage = message;
     if (tray) {
-        tray.setImage(getIconPath(state));
+        tray.setImage(getTrayIcon(state));
         tray.setToolTip(`BillDrop Agent — ${message}`);
         tray.setContextMenu(buildContextMenu());
     }
-    logger_2.logger.debug('Tray status updated', { state, message });
+    logger_1.logger.debug('Tray status updated', { state, message });
 }
 function refreshTrayMenu() {
     if (tray) {
@@ -116,7 +136,7 @@ function openSettingsWindow() {
         // Refresh tray menu in case watch folder changed
         refreshTrayMenu();
     });
-    logger_2.logger.info('Settings window opened');
+    logger_1.logger.info('Settings window opened');
 }
 function showNotification(title, body) {
     if (electron_1.Notification.isSupported()) {
