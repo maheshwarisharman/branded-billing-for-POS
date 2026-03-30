@@ -367,6 +367,201 @@ main {
     border-color: #bbf7d0;
 }
 
+.invoice-logo-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.85rem;
+}
+
+.invoice-logo {
+    width: 140px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.invoice-subtitle-row {
+    margin-top: 0.35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.invoice-subtitle-row .invoice-subtitle {
+    margin: 0;
+}
+
+.google-review-button {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid #dfe1e5;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    color: #1f2937;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(17, 24, 39, 0.08);
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+    padding: 0.65rem 1rem;
+}
+
+.google-review-button:hover {
+    transform: translateY(-1px);
+    border-color: #c7d2fe;
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+}
+
+.google-review-button:active {
+    transform: translateY(0);
+}
+
+.google-review-g {
+    font-size: 1.15rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.google-review-g .g-blue {
+    color: #4285f4;
+}
+.google-review-g .g-red {
+    color: #ea4335;
+}
+.google-review-g .g-yellow {
+    color: #fbbc05;
+}
+.google-review-g .g-green {
+    color: #34a853;
+}
+
+.google-review-text {
+    color: #111827;
+}
+
+.review-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: rgba(15, 23, 42, 0.62);
+    padding: 1rem;
+}
+
+.review-modal-card {
+    width: min(560px, 100%);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(15, 23, 42, 0.28);
+    overflow: hidden;
+}
+
+.review-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.review-modal-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.review-modal-close {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-size: 1.35rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.1rem 0.2rem;
+}
+
+.review-modal-close:hover {
+    color: #111827;
+}
+
+.review-modal-subtitle {
+    margin: 0.8rem 1.1rem 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.review-stars {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.75rem 1.1rem 0;
+}
+
+.review-star {
+    appearance: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: #d1d5db;
+    padding: 0;
+    transition:
+        transform 0.12s ease,
+        color 0.12s ease;
+}
+
+.review-star:hover {
+    transform: translateY(-1px);
+}
+
+.review-star--active {
+    color: #f59e0b;
+}
+
+.review-low-rating-wrap {
+    padding: 0.9rem 1.1rem 1.1rem;
+}
+
+.review-text-label {
+    display: block;
+    margin: 0 0 0.35rem;
+    color: #374151;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.review-textarea {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.6rem 0.7rem;
+    font: inherit;
+    color: var(--text);
+    background: #fff;
+}
+
+.review-textarea:focus {
+    outline: 2px solid #bfdbfe;
+    border-color: #93c5fd;
+}
+
 .loading-state,
 .empty-state {
     padding: 2.2rem 1.5rem;
@@ -399,6 +594,19 @@ main {
     .invoice-actions {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+
+    .invoice-subtitle-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .google-review-button {
+        width: 100%;
+    }
+
+    .review-modal-card {
+        width: min(560px, 100%);
     }
 
     .invoice-meta {

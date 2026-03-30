@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { fetchBillById } from "@/lib/bills";
+import ReviewGoogleButton from "@/app/components/ReviewGoogleButton";
 
 function formatDate(input: string): string {
   const date = new Date(input);
@@ -8,15 +9,6 @@ function formatDate(input: string): string {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
-}
-
-function statusClass(status: string): string {
-  const normalized = status.trim().toLowerCase();
-  if (normalized === "paid") return "status-pill status-pill--paid";
-  if (normalized === "failed") return "status-pill status-pill--failed";
-  if (normalized === "cancelled") return "status-pill status-pill--cancelled";
-  if (normalized === "received") return "status-pill status-pill--received";
-  return "status-pill status-pill--default";
 }
 
 export default async function InvoicePage({
@@ -75,45 +67,23 @@ export default async function InvoicePage({
       <div className="page-shell">
         <section className="card">
           <header className="invoice-header">
-            <h1 className="invoice-title">Invoice #{bill.id}</h1>
-            <p className="invoice-subtitle">
-              Generated on {formatDate(bill.createdAt)}
-            </p>
-          </header>
+            <div className="invoice-logo-wrap">
+              <img
+                src="https://homebakersmart.co.in/cdn/shop/files/MPPVV_DWI9HWHZweALK.jpg?v=1687093916&width=140"
+                alt="Brand logo"
+                width={140}
+                height={140}
+                className="invoice-logo"
+              />
+            </div>
 
-          <section className="invoice-meta">
-            <div className="meta-item">
-              <p className="meta-label">Status</p>
-              <p className="meta-value">
-                <span className={statusClass(bill.status)}>{bill.status}</span>
+            <div className="invoice-subtitle-row">
+              <p className="invoice-subtitle">
+                Generated on {formatDate(bill.createdAt)}
               </p>
+              <ReviewGoogleButton />
             </div>
-
-            <div className="meta-item">
-              <p className="meta-label">Order ID</p>
-              <p className="meta-value">{bill.orderId || "—"}</p>
-            </div>
-
-            <div className="meta-item">
-              <p className="meta-label">Customer Name</p>
-              <p className="meta-value">{bill.name || "—"}</p>
-            </div>
-
-            <div className="meta-item">
-              <p className="meta-label">Phone</p>
-              <p className="meta-value">{bill.phone || "—"}</p>
-            </div>
-
-            <div className="meta-item">
-              <p className="meta-label">File Name</p>
-              <p className="meta-value">{bill.filename}</p>
-            </div>
-
-            <div className="meta-item">
-              <p className="meta-label">Bill ID</p>
-              <p className="meta-value">{bill.id}</p>
-            </div>
-          </section>
+          </header>
 
           <section className="invoice-actions">
             {bill.downloadUrl ? (
