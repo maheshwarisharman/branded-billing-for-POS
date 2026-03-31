@@ -85,34 +85,20 @@ export default async function InvoicePage({
             </div>
           </header>
 
-          <section className="invoice-actions">
+          <section className="invoice-actions invoice-actions--single">
             {bill.downloadUrl ? (
-              <>
-                <a
-                  href={bill.downloadUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="button button-primary"
-                >
-                  Open PDF
-                </a>
-                <a
-                  href={bill.downloadUrl}
-                  download
-                  className="button button-outline"
-                >
-                  Download PDF
-                </a>
-              </>
+              <a
+                href={bill.downloadUrl}
+                download
+                className="button button-primary button-full"
+              >
+                Download Invoice PDF
+              </a>
             ) : (
-              <button className="button button-danger" disabled>
+              <button className="button button-danger button-full" disabled>
                 PDF unavailable
               </button>
             )}
-
-            <Link href="/" className="button button-outline">
-              Back
-            </Link>
           </section>
 
           {bill.downloadUrl ? (
@@ -122,6 +108,7 @@ export default async function InvoicePage({
                 src={bill.downloadUrl}
                 className="viewer-frame"
               />
+              
             </section>
           ) : (
             <p className="alert alert-error">

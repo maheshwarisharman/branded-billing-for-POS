@@ -14,7 +14,8 @@
     "@elysiajs/cors": "^1.1.0",
     "@supabase/supabase-js": "^2.43.4",
     "@aws-sdk/client-s3": "^3.556.0",
-    "@aws-sdk/s3-request-presigner": "^3.556.0"
+    "@aws-sdk/s3-request-presigner": "^3.556.0",
+    "axios": "1.13.6"
   },
   "devDependencies": {
     "bun-types": "latest",

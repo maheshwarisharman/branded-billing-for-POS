@@ -20,6 +20,8 @@ import { supabase, type BillRow } from '../supabase';
 import { uploadToS3, getPresignedUrl, buildS3Key } from '../s3';
 import { resolveMerchant, merchantAuth } from '../auth';
 
+import { sendWhatsAppMessage } from '../utils/aisensy';
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /** The daemon sends "null" (string) for missing fields — normalise to null. */
@@ -78,7 +80,7 @@ export const billRoutes = new Elysia({ prefix: '/bills' })
           order_id: nullify(body.orderId),
           status:   'received',
         })
-        .select('id, created_at')
+        .select('id, created_at, phone, name')
         .single();
 
       if (dbErr || !data) {
@@ -86,7 +88,8 @@ export const billRoutes = new Elysia({ prefix: '/bills' })
         set.status = 500;
         return { ok: false, message: 'Failed to record bill' };
       }
-
+      
+      await sendWhatsAppMessage(data.phone, data.id, data.name)
       set.status = 201;
       return {
         ok:        true,
