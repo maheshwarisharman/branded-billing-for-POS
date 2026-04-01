@@ -8,7 +8,7 @@ type ReviewGoogleButtonProps = {
 };
 
 const DEFAULT_GOOGLE_REVIEW_URL =
-  "https://g.page/r/CUSTOMER_GOOGLE_REVIEW_LINK/review";
+  "https://g.page/r/CXFff2OgfK0REAE/review";
 
 export default function ReviewGoogleButton({
   googleReviewUrl = DEFAULT_GOOGLE_REVIEW_URL,
