@@ -25,10 +25,10 @@ async function handleNewPdf(filePath) {
     }
     logger_1.logger.info('New PDF detected', { filePath });
     // Idempotency check
-    if ((0, db_1.isAlreadyUploaded)(filename)) {
-        logger_1.logger.info('Skipping duplicate — already uploaded successfully', { filename });
-        return;
-    }
+    // if (isAlreadyUploaded(filename)) {
+    //   logger.info('Skipping duplicate — already uploaded successfully', { filename });
+    //   return;
+    // }
     // Wait for the file to finish being written
     await new Promise((resolve) => setTimeout(resolve, PDF_SETTLE_DELAY_MS));
     // Verify file still exists and is readable after settle delay
