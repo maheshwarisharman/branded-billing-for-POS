@@ -81,6 +81,9 @@ export default async function InvoicePage({
               <p className="invoice-subtitle">
                 Generated on {formatDate(bill.createdAt)}
               </p>
+              <div className="review-reward-text">
+                <p>Share your google review screenshot with us on whatsapp to get <b>Rs. 100 cashback</b></p>
+              </div>
               <ReviewGoogleButton />
             </div>
           </header>

@@ -489,6 +489,13 @@ main {
     border-bottom: 1px solid var(--border);
 }
 
+.review-reward-text{
+    background-color: #c0392b;
+    padding: 0px 10px 0px 10px;
+    border-radius: 10px;
+    color: white;
+}
+
 .review-modal-title {
     margin: 0;
     font-size: 1.05rem;
